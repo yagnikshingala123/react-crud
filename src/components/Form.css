@@ -1,7 +1,14 @@
-body {font-family: Arial, Helvetica, sans-serif;}
-* {box-sizing: border-box;}
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
 
-input[type=text], select, textarea {
+* {
+  box-sizing: border-box;
+}
+
+input[type="text"],
+select,
+textarea {
   width: 100%;
   padding: 12px;
   border: 1px solid #ccc;
@@ -12,8 +19,8 @@ input[type=text], select, textarea {
   resize: vertical;
 }
 
-button[type=button] {
-  background-color: #04AA6D;
+button[type="button"] {
+  background-color: #04aa6d;
   color: white;
   padding: 12px 20px;
   border: none;
@@ -21,7 +28,7 @@ button[type=button] {
   cursor: pointer;
 }
 
-button[type=button]:hover {
+button[type="button"]:hover {
   background-color: #45a049;
 }
 
@@ -30,18 +37,28 @@ button[type=button]:hover {
   background-color: #f2f2f2;
   padding: 20px;
 }
+
 table {
-    border-collapse: collapse;
-    border-spacing: 0;
-    width: 100%;
-    border: 1px solid #ddd;
-  }
-  
-  th, td {
-    text-align: left;
-    padding: 16px;
-  }
-  
-  tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  border: 1px solid #ddd;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 16px;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.btnSpace {
+  margin: 5px;
+}
+.error-message{
+  color: red;
+  font-weight: bold;
+}

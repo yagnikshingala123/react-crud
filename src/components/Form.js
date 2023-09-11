@@ -14,6 +14,13 @@ export default class Form extends Component {
       },
       userData: [],
       index: "",
+      errors: {
+        fname: "",
+        lname: "",
+        country: "",
+        gender: "",
+        hobbies: "",
+      },
     };
   }
 
@@ -52,7 +59,42 @@ export default class Form extends Component {
   };
 
   handleClick = () => {
-    const { userData, userDetails } = this.state;
+    const { userData, userDetails, errors } = this.state;
+    if (!userDetails.fname) {
+      errors.fname = "First Name is required.";
+    } else {
+      errors.fname = "";
+    }
+
+    if (!userDetails.lname) {
+      errors.lname = "Last Name is required.";
+    } else {
+      errors.lname = "";
+    }
+
+    if (!userDetails.country) {
+      errors.country = "Country is required.";
+    } else {
+      errors.country = "";
+    }
+
+    if (!userDetails.gender) {
+      errors.gender = "Gender is required.";
+    } else {
+      errors.gender = "";
+    }
+
+    if (userDetails.hobbies.length === 0) {
+      errors.hobbies = "At least one hobby is required.";
+    } else {
+      errors.hobbies = "";
+    }
+
+    // Check if any errors exist
+    if (Object.values(errors).some((error) => error)) {
+      this.setState({ errors });
+      return;
+    }
     if (this.state.index !== "") {
       userData[this.state.index] = userDetails;
       this.setState({ userData: userData });
@@ -90,38 +132,79 @@ export default class Form extends Component {
     userData.splice(i, 1);
     this.setState({ userData: [...userData] });
   };
+  handleValidation = () => {
+    const { userDetails, errors } = this.state;
+    if (!userDetails.fname) {
+      errors.fname = "First Name is required.";
+    } else {
+      errors.fname = "";
+    }
 
+    if (!userDetails.lname) {
+      errors.lname = "Last Name is required.";
+    } else {
+      errors.lname = "";
+    }
+
+    if (!userDetails.country) {
+      errors.country = "Country is required.";
+    } else {
+      errors.country = "";
+    }
+
+    if (!userDetails.gender) {
+      errors.gender = "Gender is required.";
+    } else {
+      errors.gender = "";
+    }
+
+    if (userDetails.hobbies.length === 0) {
+      errors.hobbies = "At least one hobby is required.";
+    } else {
+      errors.hobbies = "";
+    }
+
+    // Check if any errors exist
+    if (Object.values(errors).some((error) => error)) {
+      this.setState({ errors });
+      return;
+    }
+  };
   render() {
+    const { errors, userDetails } = this.state;
     return (
       <div>
-        <h3 style={{ textAlign: "center", margin: "50px 0px" }}>Contact Form</h3>
+        <h3 style={{ textAlign: "center", margin: "50px 0px" }}>
+          Contact Form
+        </h3>
         <div className="container">
           <label>First Name</label>
           <input
             onChange={(e) => this.handleChange(e)}
-            value={this.state.userDetails.fname}
+            value={userDetails.fname}
             type="text"
             id="fname"
             name="fname"
             placeholder="Your name.."
           />
-
+          <div className="error-message">{errors.fname}</div>
           <label>Last Name</label>
           <input
             onChange={(e) => this.handleChange(e)}
-            value={this.state.userDetails.lname}
+            value={userDetails.lname}
             type="text"
             id="lname"
             name="lname"
             placeholder="Your last name.."
           />
+          <div className="error-message">{errors.lname}</div>
 
           <label>Country</label>
           <select
             id="country"
             name="country"
             onChange={(e) => this.handleChange(e)}
-            value={this.state.userDetails.country}
+            value={userDetails.country}
           >
             <option value="">Select your country</option>
             <option value="india">India</option>
@@ -129,6 +212,7 @@ export default class Form extends Component {
             <option value="canada">Canada</option>
             <option value="usa">USA</option>
           </select>
+          <div className="error-message">{errors.country}</div>
 
           <label>Gender :</label>
           <div>
@@ -137,32 +221,33 @@ export default class Form extends Component {
               name="gender"
               value="male"
               onChange={(e) => this.handleChange(e)}
-              checked={this.state.userDetails.gender === "male"}
+              checked={userDetails.gender === "male"}
             />
-            <label htmlFor="male">Male</label>
+            <label>Male</label>
 
             <input
               type="radio"
               name="gender"
               value="female"
               onChange={(e) => this.handleChange(e)}
-              checked={this.state.userDetails.gender === "female"}
+              checked={userDetails.gender === "female"}
             />
-            <label htmlFor="female">Female</label>
+            <label>Female</label>
 
             <input
               type="radio"
               name="gender"
               value="other"
               onChange={(e) => this.handleChange(e)}
-              checked={this.state.userDetails.gender === "other"}
+              checked={userDetails.gender === "other"}
             />
-            <label htmlFor="female">Other</label>
+            <label>Other</label>
             <br />
+            <div className="error-message">{errors.gender}</div>
 
             <label>Hobbies :</label>
             <br />
-            <div class="form-check">
+            <div className="form-check">
               <input
                 className="form-check-input"
                 type="checkbox"
@@ -170,26 +255,26 @@ export default class Form extends Component {
                 name="check"
                 id="flexCheckDefault"
                 onChange={(e) => this.handleChange(e)}
-                checked={this.state.userDetails.hobbies.includes("cooking")}
+                checked={userDetails.hobbies.includes("cooking")}
               />
-              <label classn="form-check-label" htmlForfor="flexCheckDefault">
+              <label classn="form-check-label">
                 cooking
               </label>
             </div>
-            <div class="form-check">
+            <div className="form-check">
               <input
                 className="form-check-input"
                 type="checkbox"
                 value="traveling"
                 name="check"
                 onChange={(e) => this.handleChange(e)}
-                checked={this.state.userDetails.hobbies.includes("traveling")}
+                checked={userDetails.hobbies.includes("traveling")}
               />
-              <label className="form-check-label" htmlForfor="flexCheckChecked">
+              <label className="form-check-label">
                 traveling
               </label>
             </div>
-            <div class="form-check">
+            <div className="form-check">
               <input
                 className="form-check-input"
                 type="checkbox"
@@ -197,12 +282,13 @@ export default class Form extends Component {
                 name="check"
                 id="flexCheckChecked"
                 onChange={(e) => this.handleChange(e)}
-                checked={this.state.userDetails.hobbies.includes("reading")}
+                checked={userDetails.hobbies.includes("reading")}
               />
-              <label className="form-check-label" htmlForfor="flexCheckChecked">
+              <label className="form-check-label">
                 reading
               </label>
             </div>
+            <div className="error-message">{errors.hobbies}</div>
           </div>
 
           <button type="button" onClick={() => this.handleClick()}>
@@ -232,12 +318,20 @@ export default class Form extends Component {
                   <td>{value.lname}</td>
                   <td>{value.country}</td>
                   <td>{value.gender}</td>
-                  <td>{value.hobbies}</td>
+                  <td>{value.hobbies.join(", ")}</td>
                   <td>
-                    <button type="button" onClick={() => this.handleEdit(i)}>
+                    <button
+                      type="button"
+                      className="btnSpace"
+                      onClick={() => this.handleEdit(i)}
+                    >
                       Edit
                     </button>
-                    <button type="button" onClick={() => this.handleDelete(i)}>
+                    <button
+                      type="button"
+                      className="btnSpace"
+                      onClick={() => this.handleDelete(i)}
+                    >
                       Delete
                     </button>
                   </td>
