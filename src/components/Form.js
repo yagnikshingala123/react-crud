@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import "./Form.css";
+import { withRouter } from "./Wrapper";
 
-export default class Form extends Component {
-  constructor() {
-    super();
+class Form extends Component {
+  constructor(props) {
+    super(props);
     this.state = {
       userDetails: {
         fname: "",
@@ -22,6 +23,16 @@ export default class Form extends Component {
         hobbies: "",
       },
     };
+  }
+
+  componentDidMount() {
+    let id = this.props.params.id;
+    // console.log(id,"this.props.params.id");
+    let userSetData = JSON.parse(localStorage.getItem("dataSet")) || [];
+    if (id) {
+      this.setState({ userDetails: userSetData[id], index: id });
+    }
+    this.setState({ userData: userSetData });
   }
 
   handleChange = (e) => {
@@ -89,8 +100,6 @@ export default class Form extends Component {
     } else {
       errors.hobbies = "";
     }
-
-    // Check if any errors exist
     if (Object.values(errors).some((error) => error)) {
       this.setState({ errors });
       return;
@@ -102,8 +111,13 @@ export default class Form extends Component {
       userData.push(userDetails);
       this.setState({ userData: userData });
     }
+    this.setData();
     this.resetForm();
     this.setState({ index: "" });
+  };
+
+  setData = () => {
+    localStorage.setItem("dataSet", JSON.stringify(this.state.userData));
   };
 
   resetForm = () => {
@@ -118,58 +132,6 @@ export default class Form extends Component {
     });
   };
 
-  handleEdit = (i) => {
-    const { userData } = this.state;
-    let details = userData[i];
-    this.setState({
-      userDetails: details,
-      index: i,
-    });
-  };
-
-  handleDelete = (i) => {
-    const { userData } = this.state;
-    userData.splice(i, 1);
-    this.setState({ userData: [...userData] });
-  };
-  handleValidation = () => {
-    const { userDetails, errors } = this.state;
-    if (!userDetails.fname) {
-      errors.fname = "First Name is required.";
-    } else {
-      errors.fname = "";
-    }
-
-    if (!userDetails.lname) {
-      errors.lname = "Last Name is required.";
-    } else {
-      errors.lname = "";
-    }
-
-    if (!userDetails.country) {
-      errors.country = "Country is required.";
-    } else {
-      errors.country = "";
-    }
-
-    if (!userDetails.gender) {
-      errors.gender = "Gender is required.";
-    } else {
-      errors.gender = "";
-    }
-
-    if (userDetails.hobbies.length === 0) {
-      errors.hobbies = "At least one hobby is required.";
-    } else {
-      errors.hobbies = "";
-    }
-
-    // Check if any errors exist
-    if (Object.values(errors).some((error) => error)) {
-      this.setState({ errors });
-      return;
-    }
-  };
   render() {
     const { errors, userDetails } = this.state;
     return (
@@ -257,9 +219,7 @@ export default class Form extends Component {
                 onChange={(e) => this.handleChange(e)}
                 checked={userDetails.hobbies.includes("cooking")}
               />
-              <label classn="form-check-label">
-                cooking
-              </label>
+              <label classn="form-check-label">cooking</label>
             </div>
             <div className="form-check">
               <input
@@ -270,9 +230,7 @@ export default class Form extends Component {
                 onChange={(e) => this.handleChange(e)}
                 checked={userDetails.hobbies.includes("traveling")}
               />
-              <label className="form-check-label">
-                traveling
-              </label>
+              <label className="form-check-label">traveling</label>
             </div>
             <div className="form-check">
               <input
@@ -284,63 +242,20 @@ export default class Form extends Component {
                 onChange={(e) => this.handleChange(e)}
                 checked={userDetails.hobbies.includes("reading")}
               />
-              <label className="form-check-label">
-                reading
-              </label>
+              <label className="form-check-label">reading</label>
             </div>
             <div className="error-message">{errors.hobbies}</div>
           </div>
-
-          <button type="button" onClick={() => this.handleClick()}>
+          <button
+            type="button"
+            className="my-3"
+            onClick={() => this.handleClick()}
+          >
             Submit
           </button>
         </div>
-
-        <h2 style={{ textAlign: "center", margin: "50px 0px" }}>
-          User Data Table
-        </h2>
-        <table>
-          <thead>
-            <tr>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Country</th>
-              <th>Gender</th>
-              <th>hobbies</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.state.userData.map((value, i) => {
-              return (
-                <tr key={i}>
-                  <td>{value.fname}</td>
-                  <td>{value.lname}</td>
-                  <td>{value.country}</td>
-                  <td>{value.gender}</td>
-                  <td>{value.hobbies.join(", ")}</td>
-                  <td>
-                    <button
-                      type="button"
-                      className="btnSpace"
-                      onClick={() => this.handleEdit(i)}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      type="button"
-                      className="btnSpace"
-                      onClick={() => this.handleDelete(i)}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
       </div>
     );
   }
 }
+export default withRouter(Form);
