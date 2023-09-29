@@ -11,7 +11,6 @@ import { withRouter } from "./Wrapper";
       componentDidMount(){
         let userSetData = JSON.parse(localStorage.getItem("dataSet"))
         this.setState({userData:userSetData})
-        console.log(userSetData,"userSetData");
       }
       
   handleEdit = (i) => {

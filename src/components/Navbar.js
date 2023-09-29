@@ -7,9 +7,9 @@ export default class Navbar extends Component {
       <div>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
           <div class="container-fluid">
-            <a class="navbar-brand" href="/">
+            <Link class="navbar-brand" to="/">
               Navbar
-            </a>
+            </Link>
             <button
               class="navbar-toggler"
               type="button"
@@ -33,6 +33,11 @@ export default class Navbar extends Component {
                     Table
                   </Link>
                 </li>
+                <li class="nav-item">
+                  <Link class="nav-link" to="/function-crud">
+                    Function
+                  </Link>
+                </li>
               </ul>
               <form class="d-flex">
                 <input
@@ -41,7 +46,7 @@ export default class Navbar extends Component {
                   placeholder="Search"
                   aria-label="Search"
                 />
-                <button class="btn btn-outline-success" type="submit">
+                <button class="btn btn-outline-success" type="button">
                   Search
                 </button>
               </form>

@@ -27,7 +27,6 @@ class Form extends Component {
 
   componentDidMount() {
     let id = this.props.params.id;
-    // console.log(id,"this.props.params.id");
     let userSetData = JSON.parse(localStorage.getItem("dataSet")) || [];
     if (id) {
       this.setState({ userDetails: userSetData[id], index: id });
@@ -114,6 +113,7 @@ class Form extends Component {
     this.setData();
     this.resetForm();
     this.setState({ index: "" });
+    this.props.navigate("/table")
   };
 
   setData = () => {
