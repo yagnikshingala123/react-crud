@@ -3,7 +3,6 @@ export const withRouter = (Component) => {
   const Wrapper = (props) => {
     const navigate = useNavigate();
     const params = useParams();
-    console.log(params,"params");
     return <Component navigate={navigate} params={params} {...props} />;
   };
   return Wrapper;

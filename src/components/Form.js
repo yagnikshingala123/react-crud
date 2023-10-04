@@ -1,10 +1,13 @@
 import React, { Component } from "react";
 import "./Form.css";
 import { withRouter } from "./Wrapper";
+import { userDetails } from "../redux/action";
+import { connect } from "react-redux";
 
 class Form extends Component {
   constructor(props) {
     super(props);
+    console.log(this.props.tableData, "tabledata--form");
     this.state = {
       userDetails: {
         fname: "",
@@ -26,12 +29,14 @@ class Form extends Component {
   }
 
   componentDidMount() {
+    let data = this.props.tableData || [];
     let id = this.props.params.id;
-    let userSetData = JSON.parse(localStorage.getItem("dataSet")) || [];
+    console.log(id,"id");
+    console.log(this.props.findData,"findData");
     if (id) {
-      this.setState({ userDetails: userSetData[id], index: id });
+      this.setState({ userDetails: this.props.findData?this.props.findData:{} });
     }
-    this.setState({ userData: userSetData });
+    this.setState({ userData: data });
   }
 
   handleChange = (e) => {
@@ -70,6 +75,7 @@ class Form extends Component {
 
   handleClick = () => {
     const { userData, userDetails, errors } = this.state;
+    let id = this.props.params.id
     if (!userDetails.fname) {
       errors.fname = "First Name is required.";
     } else {
@@ -103,21 +109,17 @@ class Form extends Component {
       this.setState({ errors });
       return;
     }
-    if (this.state.index !== "") {
+    if (id) {
       userData[this.state.index] = userDetails;
-      this.setState({ userData: userData });
     } else {
       userData.push(userDetails);
-      this.setState({ userData: userData });
     }
-    this.setData();
+    this.setState({ userData: userData }, () => {
+      this.props.usersubmit(this.state.userData);
+    });
     this.resetForm();
     this.setState({ index: "" });
-    this.props.navigate("/table")
-  };
-
-  setData = () => {
-    localStorage.setItem("dataSet", JSON.stringify(this.state.userData));
+    // this.props.navigate("/table")
   };
 
   resetForm = () => {
@@ -258,4 +260,17 @@ class Form extends Component {
     );
   }
 }
-export default withRouter(Form);
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    usersubmit: (data) => dispatch(userDetails(data)),
+  };
+};
+
+const mapStateToProps = (state) => {
+  return {
+    tableData: state?.data,
+    findData: state?.editData,
+  };
+};
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Form));

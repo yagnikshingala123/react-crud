@@ -1,36 +1,27 @@
 import React, { Component } from "react";
 import { withRouter } from "./Wrapper";
+import { connect } from "react-redux";
+import { userDelete, userEdit } from "../redux/action";
 
- class Table extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-          userData: [] 
-        };
-      }
-      componentDidMount(){
-        let userSetData = JSON.parse(localStorage.getItem("dataSet"))
-        this.setState({userData:userSetData})
-      }
-      
+class Table extends Component {
+  constructor(props) {
+    super(props);
+    console.log(this.props.tableData, "tableData--table");
+    this.state = {
+      userData: [],
+    };
+  }
+  componentDidMount() {}
+
   handleEdit = (i) => {
-    const { userData } = this.state;
-    let details = userData[i];
-    this.setState({
-      userDetails: details,
-      index: i,
-    });
-    this.props.navigate(`/edit/${i}`)
+    this.props.userEdit(i);
+    this.props.navigate(`/edit/${i}`);
   };
 
   handleDelete = (i) => {
-    const { userData } = this.state;
-    userData.splice(i, 1);
-    this.setState({ userData: [...userData] });
-    localStorage.removeItem("dataSet")
+    this.props.userDelete(i);
   };
   render() {
-
     return (
       <div>
         <h2 style={{ textAlign: "center", margin: "50px 0px" }}>
@@ -48,7 +39,7 @@ import { withRouter } from "./Wrapper";
             </tr>
           </thead>
           <tbody>
-            {this.state.userData?.map((value, i) => {
+            {this.props.tableData?.map((value, i) => {
               return (
                 <tr key={i}>
                   <td>{value.fname}</td>
@@ -81,4 +72,17 @@ import { withRouter } from "./Wrapper";
     );
   }
 }
-export default withRouter(Table)
+
+const mapStateToProps = (state) => {
+  return {
+    tableData: state?.data,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    userDelete: (data) => dispatch(userDelete(data)),
+    userEdit: (data) => dispatch(userEdit(data)),
+  };
+};
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Table));
