@@ -3,7 +3,7 @@ import "./Form.css";
 import { withRouter } from "./Wrapper";
 import { userDetails } from "../redux/action";
 import { connect } from "react-redux";
-
+import axios from "axios"
 class Form extends Component {
   constructor(props) {
     super(props);
@@ -25,18 +25,30 @@ class Form extends Component {
         gender: "",
         hobbies: "",
       },
+      moveBtn:false
     };
   }
 
+   apiCalling = () => {
+    axios.get('https://newsapi.org/v2/everything?q=bitcoin&apiKey=2888ef306ba84b86982cfac10e0380c3').then((res)=>{
+      console.log(res,"res");
+
+    })
+
+   } 
+
   componentDidMount() {
     let data = this.props.tableData || [];
+    let pathName = window.location.pathname.split("/")
+    let i = pathName[pathName.length - 1]
     let id = this.props.params.id;
     console.log(id,"id");
-    console.log(this.props.findData,"findData");
+    console.log(i,"findData");
     if (id) {
       this.setState({ userDetails: this.props.findData?this.props.findData:{} });
     }
     this.setState({ userData: data });
+    this.apiCalling()
   }
 
   handleChange = (e) => {
@@ -121,6 +133,7 @@ class Form extends Component {
     this.setState({ index: "" });
     // this.props.navigate("/table")
   };
+  
 
   resetForm = () => {
     this.setState({
@@ -133,6 +146,12 @@ class Form extends Component {
       },
     });
   };
+
+  handleButton = () => {
+    if(this.state.userDetails.fname === ""){
+      this.setState({moveBtn : !this.state.moveBtn})
+    }
+  }
 
   render() {
     const { errors, userDetails } = this.state;
@@ -248,13 +267,16 @@ class Form extends Component {
             </div>
             <div className="error-message">{errors.hobbies}</div>
           </div>
+          <div style={{display:"flex" , justifyContent: this.state.moveBtn ?"end":"start"}}>
           <button
             type="button"
             className="my-3"
             onClick={() => this.handleClick()}
+            onMouseEnter={()=>this.handleButton()}
           >
             Submit
           </button>
+          </div>
         </div>
       </div>
     );
